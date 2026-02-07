@@ -1,0 +1,17 @@
+[workspace]
+authors = ["Giovanni Dejan <giovanni.dejan@binus.ac.id>"]
+channels = ["conda-forge"]
+name = "eight-puzzle-solver"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+build = "cargo build"
+start = "cargo run"
+clean = "cargo clean"
+test = "cargo test"
+fmt = "cargo fmt"
+lint = { cmd = "cargo clippy", depends-on = ["fmt"] }
+
+[dependencies]
+rust = ">=1.93.0,<1.94"
