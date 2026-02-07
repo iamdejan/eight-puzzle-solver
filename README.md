@@ -16,4 +16,12 @@ Yeay, another 8-puzzle solver! _Who needs this, though?_ Well, this is just my a
 
 `pixi run start`
 
-## [WIP] Screenshots
+## Screenshots
+
+![Initial state of the board.](./screenshots/01_initial_state.png)
+![The board when all squares all filled.](./screenshots/02_filled.png)
+![Step 1 of the solution, if the solution is found.](./screenshots/03_solution_step_1.png)
+![Step 2 of the solution, if the solution is found.](./screenshots/04_solution_step_2.png)
+![Last step of the solution, if the solution is found.](./screenshots/05_solution_last_step.png)
+![If the process takes a bit long, then the loading page will be shown.](./screenshots/06_loading.png)
+![The displayed page if the solution is not found.](./screenshots/07_solution_not_found.png)

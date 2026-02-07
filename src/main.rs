@@ -49,11 +49,9 @@ struct App {
 
 impl App {
     fn new() -> App {
-        let default_board = Default::default();
-
         App {
             mode: AppMode::Input,
-            input_board: default_board,
+            input_board: Board::default(),
             cursor_pos: (0, 0),
             error_msg: None,
             rx_result: None,
