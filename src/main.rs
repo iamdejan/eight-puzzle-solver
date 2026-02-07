@@ -63,15 +63,11 @@ impl Board {
         let mut list: Vec<Board> = Vec::new();
 
         let empty_cell_location = self.find_empty_cell().unwrap();
-        let neighbors: [(i8, i8); 8] = [
-            (-1, -1),
+        let neighbors: [(i8, i8); 4] = [
             (-1, 0),
-            (-1, 1),
             (0, -1),
             (0, 1),
-            (1, -1),
             (1, 0),
-            (1, 1),
         ];
         for neighbor in neighbors {
             let new_r: i8 = empty_cell_location.0 as i8 + neighbor.0;
