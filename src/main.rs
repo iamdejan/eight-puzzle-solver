@@ -1,7 +1,10 @@
 #![deny(unused_variables)]
 #![deny(unused_imports)]
 
-use std::{cmp::Ordering, collections::{BinaryHeap, HashSet}};
+use std::{
+    cmp::Ordering,
+    collections::{BinaryHeap, HashSet},
+};
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct Board {
@@ -37,7 +40,7 @@ impl Board {
     }
     pub fn distance(&self, other_board: &Board) -> i64 {
         let mut total_distance: i64 = 0;
-        for number in (1 as i64)..=8 {
+        for number in 1..=8 {
             let self_location = self.find_number(number);
             let other_board_location = other_board.find_number(number);
 
@@ -63,12 +66,7 @@ impl Board {
         let mut list: Vec<Board> = Vec::new();
 
         let empty_cell_location = self.find_empty_cell().unwrap();
-        let neighbors: [(i8, i8); 4] = [
-            (-1, 0),
-            (0, -1),
-            (0, 1),
-            (1, 0),
-        ];
+        let neighbors: [(i8, i8); 4] = [(-1, 0), (0, -1), (0, 1), (1, 0)];
         for neighbor in neighbors {
             let new_r: i8 = empty_cell_location.0 as i8 + neighbor.0;
             let new_c: i8 = empty_cell_location.1 as i8 + neighbor.1;
@@ -137,14 +135,18 @@ fn main() {
     let mut queue: BinaryHeap<State> = BinaryHeap::new();
 
     let f = board.distance(&FINISHED);
-    let mut path = Vec::new();
-    path.push(board);
-    queue.push(State { board: board, path: path, f: f, g: 0 });
+    let path: Vec<Board> = vec![board];
+    queue.push(State {
+        board,
+        path,
+        f,
+        g: 0,
+    });
 
     let mut visited: HashSet<Board> = HashSet::new();
     while !queue.is_empty() {
         let current_opt: Option<State> = queue.pop();
-        if current_opt == None {
+        if current_opt.is_none() {
             // should not happen
             println!("Empty queue! Solution possibly not found");
             break;
@@ -168,15 +170,15 @@ fn main() {
         for next_board in next_boards {
             let g = current.g + 1;
             let h = next_board.distance(&FINISHED);
-            let f = g+h;
+            let f = g + h;
 
             let mut next_path = current.path.clone();
             next_path.push(next_board);
             let next_state = State {
                 board: next_board,
                 path: next_path,
-                g: g,
-                f: f,
+                g,
+                f,
             };
             queue.push(next_state);
         }
