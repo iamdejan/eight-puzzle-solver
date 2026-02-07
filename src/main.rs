@@ -3,7 +3,7 @@
 
 use std::{cmp::Ordering, collections::{BinaryHeap, HashSet}};
 
-#[derive(Copy, Clone, Eq, PartialEq, Hash)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct Board {
     pub b: [[Option<i64>; 3]; 3],
 }
@@ -102,9 +102,10 @@ const FINISHED: Board = Board {
     ],
 };
 
-#[derive(Copy, Clone, Eq, PartialEq)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct State {
     pub board: Board,
+    pub path: Vec<Board>,
     pub g: i64, // g(n) = the cost so far
     pub f: i64, // f(n) = g(n) + h(n)
 }
@@ -140,7 +141,9 @@ fn main() {
     let mut queue: BinaryHeap<State> = BinaryHeap::new();
 
     let f = board.distance(&FINISHED);
-    queue.push(State { board: board, f: f, g: 0 });
+    let mut path = Vec::new();
+    path.push(board);
+    queue.push(State { board: board, path: path, f: f, g: 0 });
 
     let mut visited: HashSet<Board> = HashSet::new();
     while !queue.is_empty() {
@@ -155,7 +158,10 @@ fn main() {
             continue;
         }
         if current.board.distance(&FINISHED) == 0 {
-            print!("Solution found!");
+            println!("Solution found!");
+            for b in current.path {
+                println!("{:?}", b);
+            }
             break;
         }
 
@@ -166,8 +172,12 @@ fn main() {
             let g = current.g + 1;
             let h = next_board.distance(&FINISHED);
             let f = g+h;
+
+            let mut next_path = current.path.clone();
+            next_path.push(next_board);
             let next_state = State {
                 board: next_board,
+                path: next_path,
                 g: g,
                 f: f,
             };
