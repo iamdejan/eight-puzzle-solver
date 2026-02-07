@@ -145,6 +145,7 @@ fn main() {
     while !queue.is_empty() {
         let current_opt: Option<State> = queue.pop();
         if current_opt == None {
+            // should not happen
             println!("Empty queue! Solution possibly not found");
             break;
         }
