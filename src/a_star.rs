@@ -1,7 +1,7 @@
 #![deny(unused_variables)]
 #![deny(unused_imports)]
 
-use crate::board;
+use crate::board::{self};
 
 use std::{
     cmp::Ordering,
@@ -42,7 +42,7 @@ impl PartialOrd for State {
     }
 }
 
-pub fn search(starting_board: board::Board) {
+pub fn search(starting_board: board::Board) -> Option<Vec<board::Board>> {
     // A* algorithm
     let mut queue: BinaryHeap<State> = BinaryHeap::new();
 
@@ -58,22 +58,14 @@ pub fn search(starting_board: board::Board) {
     let mut visited: HashSet<board::Board> = HashSet::new();
     while !queue.is_empty() {
         let current_opt: Option<State> = queue.pop();
-        if current_opt.is_none() {
-            // should not happen
-            println!("Empty queue! Solution possibly not found");
-            break;
-        }
+        current_opt.as_ref()?;
 
         let current = current_opt.unwrap();
         if visited.contains(&current.board) {
             continue;
         }
         if current.board.distance(&FINISHED) == 0 {
-            println!("Solution found!");
-            for b in current.path {
-                println!("{:?}", b);
-            }
-            break;
+            return Some(current.path);
         }
 
         visited.insert(current.board);
@@ -95,4 +87,6 @@ pub fn search(starting_board: board::Board) {
             queue.push(next_state);
         }
     }
+
+    return None;
 }

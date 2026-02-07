@@ -13,5 +13,13 @@ fn main() {
         ],
     };
 
-    a_star::search(starting_board);
+    let path_option = a_star::search(starting_board);
+    if let Some(path) = path_option {
+        println!("Solution found!");
+        for b in path {
+            println!("{:?}", b);
+        }
+    } else {
+        println!("Solution not found!");
+    }
 }
