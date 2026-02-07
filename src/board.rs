@@ -1,12 +1,48 @@
 #![deny(unused_variables)]
 #![deny(unused_imports)]
 
-#[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash, Debug, Default)]
 pub struct Board {
     pub b: [[Option<i64>; 3]; 3],
 }
 
 impl Board {
+    pub fn is_valid(&self) -> bool {
+        let mut seen = [false; 9]; // Index 0 for None, 1-8 for Numbers
+        let mut count = 0;
+
+        for r in 0..3 {
+            for c in 0..3 {
+                match self.b[r][c] {
+                    Some(n) => {
+                        if !(1..=8).contains(&n) {
+                            // number outside 1-8
+                            return false;
+                        }
+
+                        if seen[n as usize] {
+                            // the number appears twice in the board
+                            return false;
+                        }
+
+                        seen[n as usize] = true;
+                    }
+                    None => {
+                        if seen[0] {
+                            // the board has 2 (or more) empty cells
+                            return false;
+                        }
+
+                        seen[0] = true;
+                    }
+                }
+                count += 1;
+            }
+        }
+
+        return count == 9 && seen[0];
+    }
+
     fn find_number(&self, number: i64) -> Option<(usize, usize)> {
         for r in 0..3 {
             for c in 0..3 {
@@ -21,6 +57,7 @@ impl Board {
         // guaranteed to find the number
         return None;
     }
+
     fn find_empty_cell(&self) -> Option<(usize, usize)> {
         for r in 0..3 {
             for c in 0..3 {
@@ -33,6 +70,7 @@ impl Board {
         // guaranteed to find empty cell
         return None;
     }
+
     pub fn distance(&self, other_board: &Board) -> i64 {
         let mut total_distance: i64 = 0;
         for number in 1..=8 {
@@ -48,6 +86,7 @@ impl Board {
         }
         return total_distance;
     }
+
     pub fn copy_and_swap(&self, src_pos: (usize, usize), dest_pos: (usize, usize)) -> Board {
         let mut copied_b = self.b;
 
@@ -57,6 +96,7 @@ impl Board {
 
         return Board { b: copied_b };
     }
+
     pub fn get_possible_next_states(&self) -> Vec<Board> {
         let mut list: Vec<Board> = Vec::new();
 
